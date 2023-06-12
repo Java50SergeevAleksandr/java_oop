@@ -21,6 +21,6 @@ public class EvenOddComparator implements Comparator<Integer> {
 	}
 
 	private boolean isEven(Integer o1) {
-		return Math.abs(o1) % 2 > 0 ? false : true;
+		return o1 % 2 == 0;
 	}
 }
