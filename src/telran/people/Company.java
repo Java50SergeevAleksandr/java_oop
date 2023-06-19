@@ -43,18 +43,13 @@ public class Company {
 	}
 
 	public boolean addEmployee(Employee empl) {
+		Employee employee = getEmployee(empl.getId());
 		boolean res = false;
-		for (int i = 0; i < employees.length; i++) {
-			if (!employees[i].equals(empl)) {
-				res = true;
-			}
-		}
-
-		if (res) {
+		if (employee == null) {
+			res = true;
 			employees = Arrays.copyOf(employees, employees.length + 1);
 			employees[employees.length - 1] = empl;
 		}
-
 		return res;
 	}
 

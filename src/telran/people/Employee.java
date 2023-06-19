@@ -1,5 +1,7 @@
 package telran.people;
 
+import java.util.Objects;
+
 public class Employee implements Comparable<Employee> {
 	private int id;
 	private String name;
@@ -36,6 +38,18 @@ public class Employee implements Comparable<Employee> {
 	}
 
 	public boolean equals(Object emplObj) {
+		if (this == emplObj) {
+			return true;
+		}
+
+		if (emplObj == null) {
+			return false;
+		}
+
+		if (!(getClass() == emplObj.getClass())) {
+			return false;
+		}
+
 		Employee emp = (Employee) emplObj;
 		return id == emp.id;
 	}
@@ -44,7 +58,4 @@ public class Employee implements Comparable<Employee> {
 	public int compareTo(Employee empl) {
 		return id - empl.id;
 	}
-	
-	
-
 }

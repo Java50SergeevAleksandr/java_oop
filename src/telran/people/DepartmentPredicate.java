@@ -12,7 +12,7 @@ public class DepartmentPredicate implements Predicate<Employee> {
 
 	@Override
 	public boolean test(Employee emp) {
-		return emp.getDepartment() == department;
+		return emp.getDepartment().equals(department);
 	}
 
 }
