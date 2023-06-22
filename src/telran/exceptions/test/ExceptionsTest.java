@@ -43,14 +43,11 @@ class ExceptionsTest {
 		assertEquals(bbf.getFloor(), getMinFloor(bbf));
 	}
 
-	private int getMinFloor(BallBrokenFloor bbf) {
-		int res = 0;
+	private int getMinFloor(BallBrokenFloor bbf) {		
 		int left = 0;
-		int right = bbf.getnFloors();
+		int right = bbf.getnFloors();		
 
-		boolean isFind = false;
-
-		while (!isFind) {
+		while (left < right) {
 			int middle = (right + left) / 2;
 
 			if (tryBall(middle, bbf)) {
@@ -58,16 +55,9 @@ class ExceptionsTest {
 			} else {
 				left = middle + 1;
 			}
-
-			if (left == middle) {
-				isFind = true;
-				res = left;
-				System.out.println("Random floor was " + res);
-			}
-
 		}
 
-		return res;
+		return left;
 	}
 
 	private boolean tryBall(int middle, BallBrokenFloor bbf) {
