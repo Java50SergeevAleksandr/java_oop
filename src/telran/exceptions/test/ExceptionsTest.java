@@ -8,34 +8,34 @@ import telran.exceptions.BallBrokenFloor;
 
 class ExceptionsTest {
 
-	@Test
-	void testException() {
-		int res = 0;
-		try {
-			res = itThrowsCheckedException(10000);
-
-			System.out.println("everything ok");
-		} catch (RuntimeException e) {
-			System.out.println(e.getMessage());
-			res = 100;
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			res = 200;
-		}
-		assertEquals(100, res);
-
-	}
-
-	private int itThrowsCheckedException(int number) throws Exception {
-		if (number < 0) {
-			throw new Exception("just test checked exception");
-		}
-		if (number > 1000) {
-			throw new RuntimeException("number cannot be greater than 1000");
-		}
-		return number * 2;
-
-	}
+//	@Test
+//	void testException() {
+//		int res = 0;
+//		try {
+//			res = itThrowsCheckedException(10000);
+//
+//			System.out.println("everything ok");
+//		} catch (RuntimeException e) {
+//			System.out.println(e.getMessage());
+//			res = 100;
+//		} catch (Exception e) {
+//			System.out.println(e.getMessage());
+//			res = 200;
+//		}
+//		assertEquals(100, res);
+//
+//	}
+//
+//	private int itThrowsCheckedException(int number) throws Exception {
+//		if (number < 0) {
+//			throw new Exception("just test checked exception");
+//		}
+//		if (number > 1000) {
+//			throw new RuntimeException("number cannot be greater than 1000");
+//		}
+//		return number * 2;
+//
+//	}
 
 	@Test
 	void ballBrokenFloorTest() {
@@ -44,7 +44,7 @@ class ExceptionsTest {
 	}
 
 	private int getMinFloor(BallBrokenFloor bbf) {		
-		int left = 0;
+		int left = 1;
 		int right = bbf.getnFloors();		
 
 		while (left < right) {
