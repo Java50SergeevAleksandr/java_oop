@@ -33,6 +33,8 @@ class CalculatorTest {
 	@Test
 	void calculateTest() {
 		assertEquals(20, Calculator.calculate(new CalcData(40, 20, '-')));
+		assertThrowsExactly(UnsupportedOperationException.class, () -> Calculator.calculate(new CalcData(0.5, 0.24, '?')));
+		assertThrowsExactly(ArithmeticException.class, () -> Calculator.calculate(new CalcData(10, 0, '/')));
 	}
 }
 
