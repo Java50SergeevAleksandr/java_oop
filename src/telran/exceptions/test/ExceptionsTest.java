@@ -22,7 +22,7 @@ class ExceptionsTest {
 			System.out.println(e.getMessage());
 			res = 200;
 		}
-		assertEquals(20, res);
+		assertEquals(100, res);
 
 	}
 
@@ -44,8 +44,40 @@ class ExceptionsTest {
 	}
 
 	private int getMinFloor(BallBrokenFloor bbf) {
-		// TODO using the method getFloor for the class BallBrokenFloor is disallowed
-		return -1;
+		int res = 0;
+		int left = 0;
+		int right = bbf.getnFloors();
+
+		boolean isFind = false;
+
+		while (!isFind) {
+			int middle = (right + left) / 2;
+
+			if (tryBall(middle, bbf)) {
+				right = middle;
+			} else {
+				left = middle + 1;
+			}
+
+			if (left == middle) {
+				isFind = true;
+				res = left;
+				System.out.println("Random floor was " + res);
+			}
+
+		}
+
+		return res;
+	}
+
+	private boolean tryBall(int middle, BallBrokenFloor bbf) {
+		boolean isBroken = false;
+		try {
+			bbf.broken(middle);
+		} catch (Exception e) {
+			isBroken = true;
+		}
+		return isBroken;
 	}
 
 }
