@@ -46,7 +46,7 @@ public class RangePredicate implements Iterable<Integer> {
 		int pointerToCurrent = 0;
 		Predicate<Integer> innerPredicate;
 		Range range = new Range(minInclusive, maxExclusive);
-		int[] set = new int[range.length()];
+		int[] set;
 
 		RangePredicateIterator(Predicate<Integer> predicate) {
 			innerPredicate = predicate;
