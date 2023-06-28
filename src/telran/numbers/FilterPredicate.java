@@ -43,70 +43,61 @@ public class FilterPredicate implements Iterable<Integer> {
 
 	private class RangePredicateIterator implements Iterator<Integer> {
 		int current;
-		int pointerToCurrent = 0;
-		
+		int next;
+		Iterator<Integer> it;
+		Iterator<Integer> helper;
 		Predicate<Integer> innerPredicate;
-		
-		Range range = new Range(minInclusive, maxExclusive);
-		int[] set;
+		Range range;
 
 		public RangePredicateIterator(Predicate<Integer> predicate) {
 			innerPredicate = predicate;
-//			set = getArrayByPredicate();
-			current = getCurrent();
+			range = new Range(minInclusive, maxExclusive);
+			it = range.iterator();
+			helper = range.iterator();
+			next = getNext();
+			next = getNext();
 		}
 
-		private int getCurrent() {
-			int res = 0;
-			do {
-				res = range.iterator().next();
-			} while (!innerPredicate.test(res));
-			return res;
+		private int getNext() {
+			boolean isNotFind = true;
+			while (isNotFind && it.hasNext()) {
+				next = it.next();
+				if (innerPredicate.test(current)) {
+					isNotFind = false;
+				}
+
+			}
+			return next;
+
+		}
+		
+		private void getCur() {
+			boolean isNotFind = true;
+			while (isNotFind && it.hasNext()) {
+				current = it.next();
+				if (innerPredicate.test(current)) {
+					isNotFind = false;
+				}
+
+			}
+
 		}
 
-//		private int[] getArrayByPredicate() {
-//			int[] res = new int[range.length()];
-//			int index = 0;
-//			for (int num : range) {
-//				if (innerPredicate == null || innerPredicate.test(num)) {
-//					res[index++] = num;
-//				}
-//			}
-//			if (index == 0) {
-//				throw new FindException("No elements by predicate");
-//			}
-//			return Arrays.copyOf(res, index);
-//		}
-
-//		@Override
-//		public boolean hasNext() {
-//			return pointerToCurrent < set.length;
-//		}
-
-//		@Override
-//		public Integer next() {
-//			if (!hasNext()) {
-//				throw new NoSuchElementException();
-//			}
-//			return set[pointerToCurrent++];
-//		}
 		@Override
 		public boolean hasNext() {
 
-			return current < maxExclusive;
+			return it.hasNext();
 		}
 
 		@Override
-		public Integer next() {		
+		public Integer next() {
 
 			if (!hasNext()) {
 				throw new NoSuchElementException();
 			}
-			
+			getNext();
 			int res = current;
-			do {
-				current = range.iterator().next();
-			} while (!innerPredicate.test(current));
+			
 			return res;
 		}
 	}
