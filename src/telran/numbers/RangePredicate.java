@@ -1,6 +1,5 @@
 package telran.numbers;
 
-import java.lang.module.FindException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -9,7 +8,7 @@ import java.util.function.Predicate;
 public class RangePredicate implements Iterable<Integer> {
 	int minInclusive;
 	int maxExclusive;
-	Predicate<Integer> predicate;
+	Predicate<Integer> predicate = e -> true;
 
 	public RangePredicate(int minInclusive, int maxExclusive) {
 		if (minInclusive >= maxExclusive) {
@@ -43,33 +42,19 @@ public class RangePredicate implements Iterable<Integer> {
 
 	private class RangePredicateIterator implements Iterator<Integer> {
 
-		int pointerToCurrent = 0;
+		int current;
 		Predicate<Integer> innerPredicate;
-		Range range = new Range(minInclusive, maxExclusive);
-		int[] set;
 
 		RangePredicateIterator(Predicate<Integer> predicate) {
-			innerPredicate = predicate;
-			set = getArrayByPredicate();
-		}
 
-		private int[] getArrayByPredicate() {
-			int[] res = new int[range.length()];
-			int index = 0;
-			for (int num : range) {
-				if (innerPredicate == null || innerPredicate.test(num)) {
-					res[index++] = num;
-				}
-			}
-			if (index == 0) {
-				throw new FindException("No elements by predicate");
-			}
-			return Arrays.copyOf(res, index);
+			innerPredicate = predicate;
+			current = innerPredicate.test(minInclusive) ? minInclusive : getCurrent(minInclusive);
 		}
 
 		@Override
 		public boolean hasNext() {
-			return pointerToCurrent < set.length;
+
+			return current < maxExclusive;
 		}
 
 		@Override
@@ -77,7 +62,17 @@ public class RangePredicate implements Iterable<Integer> {
 			if (!hasNext()) {
 				throw new NoSuchElementException();
 			}
-			return set[pointerToCurrent++];
+			int res = current;
+			current = getCurrent(current);
+			return res;
+		}
+
+		private int getCurrent(int current) {
+			current++;
+			while (current < maxExclusive && !innerPredicate.test(current)) {
+				current++;
+			}
+			return current;
 		}
 	}
 }
