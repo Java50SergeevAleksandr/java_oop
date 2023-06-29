@@ -103,8 +103,8 @@ public class Range implements Iterable<Integer> {
 		int oldLength = length();
 		Iterator<Integer> it = iterator();
 		while (it.hasNext()) {
-			int num = it.next();
-			if (predicate.test(num)) {
+			//int num = it.next();
+			if (predicate.test(it.next())) {
 				it.remove();
 			}
 		}

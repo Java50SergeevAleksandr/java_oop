@@ -1,44 +1,59 @@
 package telran.shapes;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
 public class Canvas implements Shape, Iterable<Shape> {
 	private Shape[] shapes = new Shape[0];
 
-	private class CanvasIterator implements Iterator<Shape> {
-
-		@Override
-		public boolean hasNext() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public Shape next() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public void remove() {
-			// TODO
-		}
-
-	}
-
 	@Override
 	public int perimeter() {
-		// TODO Auto-generated method stub
 		// sum of perimeter values for all shapes in this canvas
-		return 0;
+		int res = 0;
+//		forEach(shape -> res += shape.perimeter());
+		for (Shape shape : this) {
+			res += shape.perimeter();
+		}
+
+		return res;
 	}
 
 	@Override
 	public int square() {
-		// TODO Auto-generated method stub
 		// sum of square values for all shapes in this canvas
-		return 0;
+		int res = 0;
+		for (Shape shape : this) {
+			res += shape.square();
+		}
+
+		return res;
+	}
+
+	public void addShape(Shape shape) {
+		shapes = Arrays.copyOf(shapes, shapes.length + 1);
+		shapes[shapes.length - 1] = shape;
+	}
+
+	public boolean removeIf(Predicate<Shape> predicate) {
+		int oldLenght = shapes.length;
+		Iterator<Shape> it = iterator();
+
+		while (it.hasNext()) {
+			Shape sp = it.next();
+
+			if (predicate.test(sp)) {
+				it.remove();
+			}
+
+		}
+
+		return oldLenght > shapes.length;
+	}
+
+	public boolean removeNestedCanvases() {
+		return removeIf(shape -> shape instanceof Canvas); // this.getClass();
 	}
 
 	@Override
@@ -47,17 +62,40 @@ public class Canvas implements Shape, Iterable<Shape> {
 		return new CanvasIterator();
 	}
 
-	public void addShape(Shape shape) {
-		// TODO
-	}
+	private class CanvasIterator implements Iterator<Shape> {
+		int current = 0;
+		boolean wasNext = false;
 
-	public boolean removeIf(Predicate<Shape> predicate) {
-		// TODO
-		return false;
-	}
+		@Override
+		public boolean hasNext() {
+			return current < shapes.length;
+		}
 
-	public boolean removeNestedCanvases() {
-		return removeIf(shape -> shape instanceof Canvas);
+		@Override
+		public Shape next() {
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			}
+			wasNext = true;
+			return shapes[current++];
+		}
+
+		@Override
+		public void remove() {
+			if (!wasNext) {
+				throw new IllegalStateException();
+			}
+			wasNext = false;
+			Shape[] tmp = new Shape[shapes.length - 1];
+			current--;
+			if (tmp.length != 0) {
+				System.arraycopy(shapes, 0, tmp, 0, current);
+				System.arraycopy(shapes, current + 1, tmp, current, tmp.length - current);
+			}
+
+			shapes = Arrays.copyOf(tmp, tmp.length);
+		}
+
 	}
 
 }
