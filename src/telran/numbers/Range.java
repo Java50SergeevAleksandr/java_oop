@@ -28,9 +28,9 @@ public class Range implements Iterable<Integer> {
 	}
 
 	public Range(int min, int max) {
-		if (min >= max) {
-			throw new IllegalArgumentException("min must be less than max");
-		}
+//		if (min >= max) {
+//			throw new IllegalArgumentException("min must be less than max");
+//		}
 		minInclusive = min;
 		maxExclusive = max;
 	}
